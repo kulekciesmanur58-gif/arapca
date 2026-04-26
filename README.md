@@ -3,152 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arapça Öğreniyorum - Projesi</title>
+    <title>Arapça Pro - Öğren & Pratik Yap</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #27ae60;
-            --light: #ecf0f1;
+            --primary: #1a5f7a;
+            --secondary: #159895;
+            --accent: #eb455f;
+            --light: #f8f9fa;
+            --dark: #2c3333;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light);
+            background-color: #eef2f3;
             margin: 0;
-            padding: 20px;
-            direction: ltr;
+            color: var(--dark);
         }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        h1, h2 { color: var(--primary); text-align: center; }
-        
-        /* Oyun Alanı */
-        .game-area {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-        .card {
-            background: var(--primary);
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 20px;
+            padding: 2rem;
             text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .card:hover { transform: scale(1.05); background: var(--secondary); }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 20px; }
+        
+        .section-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
 
-        /* Diyaloglar */
-        .dialogue-section {
-            background: #f9f9f9;
-            padding: 15px;
-            border-left: 5px solid var(--secondary);
-            margin-bottom: 10px;
+        /* Konuşma Alanı */
+        .speech-box {
+            text-align: center;
+            padding: 30px;
+            border: 2px dashed var(--secondary);
+            border-radius: 15px;
+            background: #f0fdfa;
         }
-        .arabic-text {
-            font-size: 1.5rem;
-            color: #2980b9;
-            display: block;
-            margin-bottom: 5px;
-            direction: rtl;
-        }
-        .listen-btn {
-            background: #e67e22;
+        .mic-btn {
+            background: var(--accent);
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            font-size: 24px;
             cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(235, 69, 95, 0.3);
         }
+        .mic-btn.recording {
+            animation: pulse 1.5s infinite;
+            background: #950101;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Oyun Alanı */
+        .grid-game {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+        .flash-card {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        .flash-card:hover { border-color: var(--secondary); transform: translateY(-5px); }
+        
+        /* Diyaloglar */
+        .dialogue-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .ar-text { font-size: 1.4rem; color: var(--primary); direction: rtl; }
+        .feedback { margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+<header>
+    <h1>Arapça Dil Atölyesi</h1>
+    <p>Dinle, Konuş ve Kelimeleri Keşfet</p>
+</header>
+
 <div class="container">
-    <h1>🌙 Arapça Öğrenme Paneli</h1>
-    <p style="text-align:center">Kelimelere tıkla, telaffuzu dinle ve eşini bul!</p>
-
-    <h2>🎮 Kelime Eşleştirme Oyunu</h2>
-    <div id="game" class="game-area">
-        </div>
-
-    <hr>
-
-    <h2>🗣️ Temel Diyaloglar</h2>
     
-    <div class="dialogue-section">
-        <span class="arabic-text">السَّلَامُ عَلَيْكُمْ (Esselâmü aleyküm)</span>
-        <strong>Anlamı:</strong> Allah'ın selamı üzerine olsun.
-        <button class="listen-btn" onclick="speak('السَّلَامُ عَلَيْكُمْ')">🔊 Dinle</button>
+    <div class="section-card">
+        <h2><i class="fas fa-microphone-alt"></i> Konuşma Pratiği</h2>
+        <p>Aşağıdaki kelimeyi söylemeyi dene, bakalım doğru telaffuz edebilecek misin?</p>
+        <div class="speech-box">
+            <h3 id="target-word" style="font-size: 2.5rem; color: var(--primary);">مَرْحَبًا</h3>
+            <p>(Merhaba)</p>
+            <button id="start-record" class="mic-btn"><i class="fas fa-microphone"></i></button>
+            <div id="result-msg" class="feedback">Mikrofona bas ve konuş...</div>
+        </div>
     </div>
 
-    <div class="dialogue-section">
-        <span class="arabic-text">كَيْفَ حَالُكَ؟ (Keyfe hâlük?)</span>
-        <strong>Anlamı:</strong> Nasılsın? (Erkek için)
-        <button class="listen-btn" onclick="speak('كَيْفَ حَالُكَ؟')">🔊 Dinle</button>
-    </div>
-
-    <div class="dialogue-section">
-        <span class="arabic-text">أَنَا بِخَيْرٍ، شُكْراً (Ene bihayrin, şükran)</span>
-        <strong>Anlamı:</strong> İyiyim, teşekkürler.
-        <button class="listen-btn" onclick="speak('أَنَا بِخَيْرٍ، شُكْراً')">🔊 Dinle</button>
-    </div>
-
-    <div class="dialogue-section">
-        <span class="arabic-text">مَا اسْمُكَ؟ (Mesmuke?)</span>
-        <strong>Anlamı:</strong> Adın ne?
-        <button class="listen-btn" onclick="speak('مَا اسْمُكَ؟')">🔊 Dinle</button>
-    </div>
-</div>
-
-<script>
-    // Konuşma Özelliği (Web Speech API)
-    function speak(text) {
-        const msg = new SpeechSynthesisUtterance();
-        msg.text = text;
-        msg.lang = 'ar-SA'; // Suudi Arabistan Arapçası
-        window.speechSynthesis.speak(msg);
-    }
-
-    // Oyun Verileri
-    const words = [
-        {ar: 'كِتَاب', tr: 'Kitap'},
-        {ar: 'قَلَم', tr: 'Kalem'},
-        {ar: 'مَدْرَسَة', tr: 'Okul'},
-        {ar: 'طَالِب', tr: 'Öğrenci'}
-    ];
-
-    const gameArea = document.getElementById('game');
-    let selectedCards = [];
-
-    // Kartları Karıştır ve Oluştur
-    function initGame() {
-        const gameItems = [...words.map(w => w.ar), ...words.map(w => w.tr)];
-        gameItems.sort(() => Math.random() - 0.5);
-
-        gameItems.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.textContent = item;
-            card.onclick = () => {
-                speak(item);
-                card.style.background = '#27ae60';
-                // Burada basit bir eşleşme mantığı eklenebilir
-            };
-            gameArea.appendChild(card);
-        });
-    }
-
-    initGame();
-</script>
-
-</body>
-</html>
+    <div class="section-card">
+        <h2><i class="fas fa-layer
