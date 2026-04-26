@@ -117,4 +117,107 @@
     </div>
 
     <div class="section-card">
-        <h2><i class="fas fa-layer
+        <h2><i class="fas fa-layer-group"></i> Kelime Kartları (Sesli)</h2>
+        <div class="grid-game" id="word-grid"></div>
+    </div>
+
+    <div class="section-card">
+        <h2><i class="fas fa-comments"></i> Günlük Diyaloglar</h2>
+        <div id="dialogue-list"></div>
+    </div>
+
+</div>
+
+<script>
+    // --- SESLENDİRME (Text-to-Speech) ---
+    function playSound(text) {
+        const synth = window.speechSynthesis;
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'ar-SA';
+        utter.rate = 0.8; // Biraz daha yavaş ve anlaşılır
+        synth.speak(utter);
+    }
+
+    // --- SES TANIMA (Speech-to-Text) ---
+    const startBtn = document.getElementById('start-record');
+    const resultMsg = document.getElementById('result-msg');
+    const targetWord = "مرحبا"; // Karşılaştırılacak hedef kelime
+
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = 'ar-SA';
+        recognition.continuous = false;
+
+        startBtn.onclick = () => {
+            recognition.start();
+            startBtn.classList.add('recording');
+            resultMsg.innerText = "Dinleniyor...";
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            startBtn.classList.remove('recording');
+            
+            if(transcript.includes(targetWord) || transcript == targetWord) {
+                resultMsg.innerHTML = `<span style="color:green">✔ Harika! Şunu dedin: "${transcript}"</span>`;
+            } else {
+                resultMsg.innerHTML = `<span style="color:orange">Tekrar dene. Sen şunu dedin: "${transcript}"</span>`;
+            }
+        };
+
+        recognition.onerror = () => {
+            startBtn.classList.remove('recording');
+            resultMsg.innerText = "Hata oluştu, tekrar dene.";
+        };
+    } else {
+        resultMsg.innerText = "Tarayıcın ses tanımayı desteklemiyor.";
+    }
+
+    // --- KARTLAR VE DİYALOGLAR ---
+    const words = [
+        {ar: 'أنا أدْرُسُ', tr: 'Ders çalışıyorum'},
+        {ar: 'أَيْنَ؟', tr: 'Nerede?'},
+        {ar: 'طعام', tr: 'Yemek'},
+        {ar: 'ساعة', tr: 'Saat'},
+        {ar: 'مكتبة', tr: 'Kütüphane'},
+        {ar: 'صديق', tr: 'Arkadaş'}
+    ];
+
+    const dialogues = [
+        {ar: "كَيْفَ حَالُكَ؟", tr: "Nasılsın?", phonetic: "Keyfe haluk?"},
+        {ar: "أَنَا سَعِيدٌ جِدًّا", tr: "Çok mutluyum", phonetic: "Ene saidun cidden"},
+        {ar: "مَاذَا تَفْعَلُ؟", tr: "Ne yapıyorsun?", phonetic: "Maza tefal?"},
+        {ar: "إِلَى اللِّقَاءِ", tr: "Görüşmek üzere", phonetic: "İle-llika"}
+    ];
+
+    // Sayfa Yüklendiğinde İçeriği Oluştur
+    window.onload = () => {
+        const grid = document.getElementById('word-grid');
+        words.forEach(w => {
+            const div = document.createElement('div');
+            div.className = 'flash-card';
+            div.innerHTML = `<div>${w.ar}</div><div style="font-size:0.8rem; color:grey">${w.tr}</div>`;
+            div.onclick = () => playSound(w.ar);
+            grid.appendChild(div);
+        });
+
+        const dList = document.getElementById('dialogue-list');
+        dialogues.forEach(d => {
+            const row = document.createElement('div');
+            row.className = 'dialogue-row';
+            row.innerHTML = `
+                <div>
+                    <div class="ar-text">${d.ar}</div>
+                    <small>${d.tr} (${d.phonetic})</small>
+                </div>
+                <button class="mic-btn" style="width:40px; height:40px; font-size:14px;" onclick="playSound('${d.ar}')">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            `;
+            dList.appendChild(row);
+        });
+    };
+</script>
+
+</body>
+</html>
